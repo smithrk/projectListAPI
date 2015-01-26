@@ -16,5 +16,15 @@ Route::get('/', function()
 	return View::make('hello');
 });
 
-Route::resource('welcome', 'WelcomeController');
 Route::resource('profile', 'ProfilePageController');
+
+Route::resource('profiles', 'ProfilePageController@listUsers');
+
+Route::resource('profile/create', 'ProfilePageController@createTable');
+
+Route::resource('profile/user', 'ProfilePageController@createUser');
+
+Route::resource('newuser', 'ProfilePageController@createUser');
+
+Route::resource('updateuser', 'ProfilePageController@updateUser');
+

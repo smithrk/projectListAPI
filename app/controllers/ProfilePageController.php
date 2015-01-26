@@ -2,6 +2,7 @@
 
 class ProfilePageController extends \BaseController {
 
+
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -9,7 +10,50 @@ class ProfilePageController extends \BaseController {
 	 */
 	public function index()
 	{
-		return 'Welcome';
+		return 'something';
+	}
+	public function createTable(){
+		$status = Schema::create('users', function($table){
+			$table->increments('id');
+			$table->string('name', 100);
+			//$table->string('email', 100);
+			$table->string('email')->unique();
+		});
+		return '[{"create": "'.$status.'"}]';
+	}
+	public function createUser(){
+		
+		if(isset($_REQUEST['name']) && isset($_REQUEST['email']) && !($this->validate($_REQUEST['email']))){
+			$status = DB::table('users')->insert(array(
+			array('email' => $_REQUEST['email'], 'name' => $_REQUEST['name'])
+			));
+			return '[{"data": "1", "create": "'.$status.'"}]';
+        }else{
+            return '[{"data": "0", "create": "0"}]';
+	    }
+		
+	}
+
+	public function updateUser(){
+		if(isset($_REQUEST['name']) && isset($_REQUEST['email'])){
+			$status = DB::table('users')
+				->where('email', $_REQUEST['email'])
+				->update(array('name' => $_REQUEST['name']));
+			return '[{"data": "1", "update": "'.$status.'"}]';
+        }else{
+            return '[{"data": "0", "udpate": "0"}]';
+		}
+
+
+	}
+
+	public function listUsers(){
+		$data = DB::select('select * from users');
+		return json_encode($data);
+	}
+	public function validate($email){
+		$status = DB::select('select count(id) from users where email="'.$email.'"');
+		return $status;
 	}
 	public function lookup($id){
 		return 'it is working';
@@ -83,6 +127,5 @@ class ProfilePageController extends \BaseController {
 	{
 		//
 	}
-
 
 }
