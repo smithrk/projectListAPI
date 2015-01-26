@@ -1,6 +1,6 @@
 <?php
 
-class ProfilePageController extends \BaseController {
+class ProjectAPIController extends \BaseController {
 
 
 	/**
@@ -10,25 +10,29 @@ class ProfilePageController extends \BaseController {
 	 */
 	public function index()
 	{
+		error_log('a string');
 		return 'something';
 	}
-	public function createTable(){
-		Schema::dropIfExists('users');
-		$status = Schema::create('users', function($table){
+	public function createProjectTable(){
+		Schema::dropIfExists('projects');
+		$status = Schema::create('projects', function($table){
 			$table->increments('id');
-			$table->string('name', 100);
+			$table->string('title', 100)->unique();
 			//$table->string('email', 100);
-			$table->string('email')->unique();
-			$table->string('github');
+			$table->string('date');
+			$table->string('contributors');
+			$table->string('location');
 		});
 		return '[{"create": "'.$status.'"}]';
 	}
-	public function createUser(){
-	
-		if(isset($_REQUEST['name']) && isset($_REQUEST['email']) && isset($_REQUEST['github']) && !($this->validate($_REQUEST['email']))){
-			$status = DB::table('users')->insert(array(
-			array('email' => $_REQUEST['email'], 'name' => $_REQUEST['name'], 'github' => $_REQUEST['github'])
+	public function createProject(){
+		
+		if(isset($_REQUEST['title']) && isset($_REQUEST['date']) && isset($_REQUEST['contributors']) && isset($_REQUEST['location']) && !($this->validate($_REQUEST['title']))){
+			
+			$status = DB::table('projects')->insert(array(
+			array('title' => $_REQUEST['title'], 'date' => $_REQUEST['date'], 'contributors' => $_REQUEST['contributors'], 'location' => $_REQUEST['location'])
 			));
+			
 			return '[{"data": "1", "create": "'.$status.'"}]';
         }else{
             return '[{"data": "0", "create": "0"}]';
@@ -36,11 +40,11 @@ class ProfilePageController extends \BaseController {
 		
 	}
 
-	public function updateUser(){
-		if(isset($_REQUEST['name']) && isset($_REQUEST['email'])){
-			$status = DB::table('users')
-				->where('email', $_REQUEST['email'])
-				->update(array('name' => $_REQUEST['name']));
+	public function updateProject(){
+		if(isset($_REQUEST['title']) && isset($_REQUEST['date']) && isset($_REQUEST['contributors']) && isset($_REQUEST['location'])){
+			$status = DB::table('projects')
+				->where('title', $_REQUEST['title'])
+				->update(array('date' => $_REQUEST['date'], 'contributors' => $_REQUEST['contributors'], 'location' => $_REQUEST['location'] ));
 			return '[{"data": "1", "update": "'.$status.'"}]';
         }else{
             return '[{"data": "0", "udpate": "0"}]';
@@ -49,12 +53,12 @@ class ProfilePageController extends \BaseController {
 
 	}
 
-	public function listUsers(){
-		$data = DB::select('select * from users');
+	public function listProjects(){
+		$data = DB::select('select * from projects');
 		return json_encode($data);
 	}
-	public function validate($email){
-		$status = DB::select('select count(id) count from users where email="'.$email.'"');
+	public function validate($title){
+		$status = DB::select('select count(id) count from projects where title="'.$title.'"');
 		//$status = false;
 		error_log(print_r($status,1));
 		return $status[0]-> count;

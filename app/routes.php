@@ -20,11 +20,19 @@ Route::resource('profile', 'ProfilePageController');
 
 Route::resource('profiles', 'ProfilePageController@listUsers');
 
-Route::resource('profile/create', 'ProfilePageController@createTable');
+Route::resource('createUserTable', 'ProfilePageController@createTable');
 
-Route::resource('profile/user', 'ProfilePageController@createUser');
+Route::resource('newUser', 'ProfilePageController@createUser');
 
-Route::resource('newuser', 'ProfilePageController@createUser');
+Route::resource('updateUser', 'ProfilePageController@updateUser');
 
-Route::resource('updateuser', 'ProfilePageController@updateUser');
+Route::resource('project', 'ProjectAPIController');
+
+Route::resource('projects', 'ProjectAPIController@listProjects');
+
+Route::resource('createProjectTable', 'ProjectAPIController@createProjectTable');
+
+Route::resource('newProject', 'ProjectAPIController@createProject');
+
+Route::resource('updateProject', 'ProjectAPIController@updateProject');
 
