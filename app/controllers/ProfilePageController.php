@@ -49,7 +49,7 @@ class ProfilePageController extends \BaseController {
 
 	}
 
-	public function listUsers(){
+	public static function listUsers(){
 		$data = DB::select('select * from users');
 		return json_encode($data);
 	}
@@ -59,8 +59,9 @@ class ProfilePageController extends \BaseController {
 		error_log(print_r($status,1));
 		return $status[0]-> count;
 	}
-	public function lookup($id){
-		return 'it is working';
+	
+	public static function getProfile($email){
+		return DB::select('select * from users where email="'.$email.'" limit 1');
 	}
 
 	/**

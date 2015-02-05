@@ -13,8 +13,9 @@
 
 Route::get('/', function()
 {
-	return View::make('hello');
+	return View::make('home');
 });
+Route::resource('home', 'pageController');
 
 Route::resource('profile', 'ProfilePageController');
 
